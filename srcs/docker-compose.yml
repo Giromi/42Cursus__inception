@@ -1,39 +1,27 @@
-
 version: '3'
 
-volumes:
-  data: {}
-
 services:
-  mariadb:
-  image: debian:buster
-        restart: always
-        expose:
-        - "3306"
-        newworks:
-        - intra
-        tty: true
+  flask:
+    build:
+      context: ./flask
+      dockerfile: ./Dockerfile
+    container_name: flask
+    image: "flask:test"
+    ports:
+      - "5000:5000"
+    networks:
+      - backend
   nginx:
-  image: debian:buster
-        restart: always
-  ports:
-  - "443:443"
-  volumes:
-  - data:/var/www/html
-  newtworks:
-  - intra
-  tty: true
-  wordpress:
-  image: debian:buster
-  restart: always
-  volumes:
-  - data:/var/www/html
-      expose:
-        - "9000"
-  newtworks:
-  - intra
-      tty: true
-newworks:
-  intra:
-    driver: bridge
+    build:
+      context: ./nginx
+      dockerfile: ./Dockerfile
+    container_name: nginx
+    image: "nginx:test"
+    ports:
+      - "80:80"
+    networks:
+      - backend
 
+networks: # 가장 기본적인 bridge 네트워크
+  backend:
+    driver: bridge
