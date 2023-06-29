@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  webserver:
+    container_name: NGINX
+    image: my_nginx:debian_bullseye
+    build: nginx/
+    ports:
+      - "443:443"
+    tty: true
+    depends_on:
+      - wordpress_php
+      - database
+  wordpress_php:
+    container_name: WordPress+PHP
+    image: my_wordpress:debian_bullseye
+    build: wordpress/
+    volumes:
+      - wp_data:/var/www/html
+    expose:
+      - "9000"
+  newtworks:
+    - intra
+  tty: true
+  volumes:
+    - data:/var/www/html
+  newtworks:
+    - intra
+  tty: true
+
+  database:
+    image: my_mariadb:debian_bullseye
+    expose:
+      - "3306"
+    newworks:
+      - intra
+    tty: true
+networks:
+  intra:
+    driver: bridge
+volumes:
+  DB_data: {}
+  WP_data: {}

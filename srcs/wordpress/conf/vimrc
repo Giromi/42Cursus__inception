@@ -1,0 +1,18 @@
+set nu
+syntax on
+
+nmap <C-s> :w<CR>
+imap <C-s> <ESC>:w<CR>a
+
+let mapleader=','
+map <leader>q :bp<CR>
+map <leader>w :bp<CR>
+map <leader>x :bd<CR>
+map <leader>X :bd!<CR>
+
+set mouse=a
+set clipboard^=unnamed,unnamedplus
+
+set t_co=256
+set background=dark
+colorscheme ron
