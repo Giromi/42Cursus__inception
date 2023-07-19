@@ -43,6 +43,16 @@ ls:
 	@echo volumes
 	@docker volume ls
 	@echo
+logs:
+	@echo
+	@echo my_nginx
+	docker logs my_nginx
+	@echo
+	@echo my_wordpress
+	docker logs my_wordpress
+	@echo
+	@echo my_mariadb
+	docker logs my_mariadb
 
 re:
 	make fclean

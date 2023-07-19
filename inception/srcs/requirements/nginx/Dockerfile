@@ -15,11 +15,9 @@ COPY ./conf/default.conf ./etc/nginx/conf.d/default.conf
 
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/server_pkey.pem -out /etc/ssl/certs/server.crt -subj "/C=KR/ST=Seoul/L=Seoul/O=42/CN=www.example.com"
 
-#zsh remove
-# RUN apt install git -y && apt install zsh -y && sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-# COPY ./html ./var/www/html
+COPY ./tools/nginx_scripts.sh /
 
-ENTRYPOINT nginx -g "daemon off;"
+CMD [ "/nginx_scripts.sh" ]
 
 EXPOSE 443
-# CMD [ "zsh" ]
+
