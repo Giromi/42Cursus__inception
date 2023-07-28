@@ -28,7 +28,7 @@ services:
     env_file:
       - .env
     tty: true
-    # restart: always
+    restart: always
     depends_on:
       - mariadb
 

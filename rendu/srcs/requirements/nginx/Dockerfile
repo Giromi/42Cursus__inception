@@ -1,5 +1,6 @@
 FROM debian:bullseye
 
+
 RUN apt-get update 
 RUN apt-get upgrade -y
 RUN apt-get install -y vim
@@ -15,9 +16,9 @@ COPY ./conf/default.conf ./etc/nginx/conf.d/default.conf
 
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/server_pkey.pem -out /etc/ssl/certs/server.crt -subj "/C=KR/ST=Seoul/L=Seoul/O=42/CN=www.example.com"
 
-COPY ./tools/nginx_scripts.sh /
+COPY ./tools/nginx_scripts.bash /
 
-CMD [ "/nginx_scripts.sh" ]
+CMD [ "/nginx_scripts.bash" ]
 
 EXPOSE 443
 
