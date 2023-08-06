@@ -8,8 +8,6 @@
 # rm -rf *
 # WP-CLI를 다운로드합니다.
 
-set -ex;
-
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 
 # 다운로드한 WP-CLI를 실행 가능하도록 만듭니다.
@@ -30,7 +28,6 @@ if [ -z "$(ls -A /var/www/wordpress)" ]; then
 
     wp-cli --allow-root core download 
     # Wait for MariaDB
-    #
 
     wp-cli --allow-root config create   \
         --dbname=$DB_NAME               \
@@ -39,14 +36,21 @@ if [ -z "$(ls -A /var/www/wordpress)" ]; then
         --dbhost=$DB_HOST
 
     wp-cli --allow-root core install    \
-        --url=localhost					\
+        --url=$DOMAIN_NAME              \
         --title=$WP_TITLE               \
-        --admin_user=$WP_ADMIN_USR      \
+        --admin_user=$WP_ADMIN_NAME     \
         --admin_password=$WP_ADMIN_PWD  \
         --admin_email=$WP_ADMIN_EMAIL   \
-        --skip-email 
+        --skip-email
+
+    wp-cli --allow-root user create $WP_USER_NAME $WP_USER_EMAIL \
+        --user_pass=$WP_USER_PWD            \
+        --user_url=$WP_USER_URL             \
+        --first_name=$WP_USER_FIRST_NAME    \
+        --last_name=$WP_USER_LAST_NAME      \
+        --role=$WP_USER_ROLE
 else
-    echo "< Here is already installed"
+    echo '< Here is already installed'
 fi
 # wp-cli-config.php 파일을 생성합니다.
 # WordPress를 설치합니다.

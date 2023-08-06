@@ -1,23 +1,33 @@
-.PHONY: all build up down start stop down-volumes erase re
+# 변수 선언
+MAKE	:=	make -i
+DB_DIR	:=	/home/minsuki2/data/DB
+WP_DIR	:=	/home/minsuki2/data/WordPress
+SHELL	:=	/bin/bash
 
-MAKE = make -i
+.PHONY: all build up up_d down start stop re			\
+		rm rmi rmv rmd rmn								\
+		exec_n exec_w exec_m							\
+		stop_all rm_all rmi_all rmv_all fclean			\
+		logs_n logs_w logs_m 							\
+		ls data 
 
 all :
-	make build
-	make up
+	${MAKE} build
+	${MAKE} up
 
 build :
 	@docker compose -f ./srcs/docker-compose.yml build
 
 up :
+	@docker compose -f ./srcs/docker-compose.yml up
+
+up_d :
 	@docker compose -f ./srcs/docker-compose.yml up -d
 
 # @docker compose -f ./srcs/docker-compose.yml down --volumes
 
 start :
 	@docker compose -f ./srcs/docker-compose.yml start
-
-
 
 
 stop :
@@ -38,11 +48,14 @@ rmv :
 rmd :
 	@echo ">>>Data 삭제<<<"
 	@echo -n "mariadb > "
-	sudo rm -rf /goinfre/minsuki2/inception_data/mariadb/* 
+	sudo rm -rf ${DB_DIR}/*
 	@echo -n "wordpress > "
-	sudo rm -rf /goinfre/minsuki2/inception_data/wordpress/* 
-	@make data
+	sudo rm -rf ${WP_DIR}/*
+	@${MAKE} data
 
+rmn :
+	@echo ">>>network 삭제<<<"
+	docker network rm my_network
 
 exec_n:
 	@docker exec -it my_nginx /bin/bash
@@ -59,16 +72,11 @@ stop_all :
 rm_all :
 	docker rm -f `docker ps -aq`
 
-
-
-
 rmi_all :
 	docker rmi -f `docker images -aq`
 
 rmv_all :
 	docker volume rm `docker volume ls -q`
-
-
 
 fclean:
 	${MAKE} down
@@ -77,18 +85,20 @@ fclean:
 	${MAKE} rmd
 
 ls:
-	@echo container
+	@echo -e "\n>>> Compose <<<"
+	@docker compose ls
+	@echo -e "\n>>>> Container <<<"
 	@docker ps -a
-	@echo
-	@echo images
+	@echo -e "\n>>>> Images <<<"
 	@docker images
-	@echo
-	@echo volumes
+	@echo -e "\n>>>> Volumes <<<"
 	@docker volume ls
+	@echo -e "\n>>>> Networks <<<"
+	@docker network ls
 
 data:
 	@echo -e '\n>>>Data 확인<<<'
-	@ls -al /goinfre/minsuki2/inception_data/wordpress/ /goinfre/minsuki2/inception_data/mariadb/
+	@ls -al ${DB_DIR} ${WP_DIR}
 
 logs_n:
 	docker logs my_nginx
@@ -100,6 +110,6 @@ logs_m:
 	docker logs my_mariadb
 
 re:
-	make fclean
-	make all
+	${MAKE} fclean
+	${MAKE} all
 
