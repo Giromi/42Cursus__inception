@@ -56,25 +56,25 @@ rmn :
 	@echo ">>>network 삭제<<<"
 	docker network rm my_network
 
-exec_n:
+exec_n :
 	@docker exec -it my_nginx /bin/bash
 
-exec_w:
+exec_w :
 	@docker exec -it my_wordpress /bin/bash
-
-exec_m:
+ 
+exec_m :
 	@docker exec -it my_mariadb /bin/bash
 
-stop_all : 
+stop_a : 
 	docker stop -f `docker ps -aq`
 
-rm_all :
+all_rm :
 	docker rm -f `docker ps -aq`
 
-rmi_all :
+all_rmi :
 	docker rmi -f `docker images -aq`
 
-rmv_all :
+all_rmv :
 	docker volume rm `docker volume ls -q`
 
 fclean:

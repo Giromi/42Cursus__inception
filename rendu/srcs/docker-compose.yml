@@ -5,16 +5,17 @@ services:
     container_name: my_nginx
     build: ./requirements/nginx/
     image: nginx:42
-    ports: # 호스트 443번을 컨테이너 443에 연결
-      - "443:443"
     volumes:
       - wp_data:/var/www/wordpress
     env_file:
       - .env
     networks:
       - inception
-    # depends_on:
-    #   - wordpress
+    depends_on:
+      - wordpress
+    ports:
+      - "443:443"
+    init: true
     restart: always
 
   wordpress:
@@ -27,14 +28,13 @@ services:
       - .env
     networks:
       - inception
-    # depends_on:
-    #   - mariadb
+    depends_on:
+      - mariadb
+    init: true
     restart: always
 
   mariadb:
     container_name: my_mariadb
-    # image와 build 키워드를 docker-compose에서 동시에 사용하면 image를 레지스트리에서 찾지 않고 build에서 만든 것을
-    # image로 사용하고 이름과 태그를 image키워드 옆에있는 mairadb 42로 정해버린다.
     build: ./requirements/mariadb/
     image: mariadb:42
     volumes:
@@ -43,6 +43,7 @@ services:
       - .env
     networks:
       - inception
+    init: true
     restart: always
 
 networks:
@@ -54,9 +55,9 @@ volumes:
     name: wp
     driver: local
     driver_opts:
-      type: none    # none으로 해야 그대로 bind됨
+      type: none
       device: /home/minsuki2/data/WordPress
-      o: bind       # 마운트 옵션 bind하겠다.
+      o: bind
   db_data:
     name: db
     driver: local
