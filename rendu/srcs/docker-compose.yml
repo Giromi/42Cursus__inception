@@ -11,11 +11,11 @@ services:
       - wp_data:/var/www/wordpress
     env_file:
       - .env
-    restart: always
     networks:
       - inception
-    depends_on:
-      - wordpress
+    # depends_on:
+    #   - wordpress
+    restart: always
 
   wordpress:
     container_name: my_wordpress
@@ -25,11 +25,11 @@ services:
       - wp_data:/var/www/wordpress
     env_file:
       - .env
-    restart: always
     networks:
       - inception
-    depends_on:
-      - mariadb
+    # depends_on:
+    #   - mariadb
+    restart: always
 
   mariadb:
     container_name: my_mariadb
@@ -41,9 +41,9 @@ services:
       - db_data:/var/lib/mysql
     env_file:
       - .env
-    restart: always
     networks:
       - inception
+    restart: always
 
 networks:
   inception:
@@ -54,14 +54,14 @@ volumes:
     name: wp
     driver: local
     driver_opts:
+      type: none    # none으로 해야 그대로 bind됨
       device: /home/minsuki2/data/WordPress
       o: bind       # 마운트 옵션 bind하겠다.
-      type: none    # none으로 해야 그대로 bind됨
   db_data:
     name: db
     driver: local
     driver_opts:
+      type: none
       device: /home/minsuki2/data/DB
       o: bind
-      type: none
 

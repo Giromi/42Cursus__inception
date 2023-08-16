@@ -8,7 +8,7 @@ RUN apt update -y && apt upgrade -y         \
 COPY ./tools/50-server.cnf /etc/mysql/mariadb.conf.d/
 COPY ./tools/mariadb_script.bash /
 
-CMD ["/mariadb_script.bash"]
+ENTRYPOINT [ "/mariadb_script.bash" ]
 
 
 # 권한이 없어서 VM에서만 가능

@@ -17,10 +17,8 @@ RUN apt-get install vim -y
 
 COPY ./conf/www.conf /etc/php/7.4/fpm/pool.d/
 COPY ./tools/wordpress_script.bash /
-# COPY ./tools/wp-config.php /
-# COPY ./wp-config.php /var/www/html/tmp_wp-config.php
 
-CMD [ "/wordpress_script.bash" ]
+ENTRYPOINT [ "/wordpress_script.bash" ]
 
 EXPOSE 9000
 

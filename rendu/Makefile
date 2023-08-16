@@ -39,10 +39,10 @@ rm :
 down :
 	@docker compose -f ./srcs/docker-compose.yml down
 
-rmi :
+down_rmi :
 	@docker compose -f ./srcs/docker-compose.yml down --rmi local
 
-rmv :
+down_rmv :
 	@docker compose -f ./srcs/docker-compose.yml down --volumes
 
 rmd :
@@ -51,7 +51,6 @@ rmd :
 	sudo rm -rf ${DB_DIR}/*
 	@echo -n "wordpress > "
 	sudo rm -rf ${WP_DIR}/*
-	@${MAKE} data
 
 rmn :
 	@echo ">>>network 삭제<<<"
@@ -79,9 +78,8 @@ rmv_all :
 	docker volume rm `docker volume ls -q`
 
 fclean:
-	${MAKE} down
-	${MAKE} rmi
-	${MAKE} rmv
+	${MAKE} down_rmi
+	${MAKE} down_rmv
 	${MAKE} rmd
 
 ls:
@@ -96,8 +94,8 @@ ls:
 	@echo -e "\n>>>> Networks <<<"
 	@docker network ls
 
-data:
-	@echo -e '\n>>>Data 확인<<<'
+dls:
+	@echo -e '\n>>> Data <<<'
 	@ls -al ${DB_DIR} ${WP_DIR}
 
 logs_n:

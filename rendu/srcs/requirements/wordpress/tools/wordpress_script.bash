@@ -55,8 +55,10 @@ fi
 # wp-cli-config.php 파일을 생성합니다.
 # WordPress를 설치합니다.
 
-service php7.4-fpm start
-service php7.4-fpm stop
+# service php7.4-fpm start
+# service php7.4-fpm stop
+mkdir -p -m 755 /run/php
 
+echo '>>> PHP-FPM is starting <<<'
 php-fpm7.4 -F
 
